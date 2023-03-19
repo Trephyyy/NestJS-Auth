@@ -16,12 +16,17 @@ exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
 const auth_service_1 = require("./auth.service");
 const local_auth_guard_1 = require("./guards/local-auth.guard");
+const steam_auth_guard_1 = require("./guards/steam-auth.guard");
 let AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
     }
-    async login(req) {
-        return this.authService.login(req.user);
+    async loginLocal(req) {
+        return this.authService.loginLocal(req.user);
+    }
+    loginSteam() { }
+    returnSteam(req) {
+        return req.user;
     }
 };
 __decorate([
@@ -31,7 +36,22 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], AuthController.prototype, "login", null);
+], AuthController.prototype, "loginLocal", null);
+__decorate([
+    (0, common_1.UseGuards)(steam_auth_guard_1.SteamAuthGuard),
+    (0, common_1.Get)('/steam'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "loginSteam", null);
+__decorate([
+    (0, common_1.UseGuards)(steam_auth_guard_1.SteamAuthGuard),
+    (0, common_1.Get)('/steam/return'),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Object)
+], AuthController.prototype, "returnSteam", null);
 AuthController = __decorate([
     (0, common_1.Controller)('auth'),
     __metadata("design:paramtypes", [auth_service_1.AuthService])

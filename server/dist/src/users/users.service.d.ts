@@ -5,14 +5,20 @@ import { User } from './entities/user.entity';
 export declare class UsersService {
     private userRepository;
     constructor(userRepository: Repository<User>);
-    create(createUserDto: CreateUserDto): Promise<{
+    createLocal(createUserDto: CreateUserDto): Promise<{
         id: number;
         username: string;
         password: string;
         authStrategy: string;
     } & User>;
+    createSteam(data: any): Promise<{
+        id: number;
+        authStrategy: string;
+        username: any;
+        steamId: any;
+    } & User>;
     findOneByUsername(username: string): Promise<User | undefined>;
-    findOneById(id: number): string;
+    findOneBySteamId(steamId: number): Promise<User | undefined>;
     update(id: number, updateUserDto: UpdateUserDto): string;
     remove(id: number): string;
 }

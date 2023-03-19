@@ -21,12 +21,12 @@ let UsersService = class UsersService {
     constructor(userRepository) {
         this.userRepository = userRepository;
     }
-    async create(createUserDto) {
+    async createLocal(createUserDto) {
         const strategy = 'local';
         const id = Math.floor(Math.random() * 90000000) + 10000000;
         const user = await this.findOneByUsername(createUserDto.username);
         if (user) {
-            throw new common_1.HttpException('User Already Exists', common_1.HttpStatus.BAD_REQUEST);
+            throw new common_1.HttpException('Username Taken', common_1.HttpStatus.BAD_REQUEST);
         }
         else {
             const user = {
@@ -38,11 +38,22 @@ let UsersService = class UsersService {
             return this.userRepository.save(user);
         }
     }
+    async createSteam(data) {
+        const strategy = 'steam';
+        const id = Math.floor(Math.random() * 90000000) + 10000000;
+        const user = {
+            id: id,
+            authStrategy: strategy,
+            username: data.username,
+            steamId: data.id,
+        };
+        return this.userRepository.save(user);
+    }
     async findOneByUsername(username) {
         return this.userRepository.findOne({ where: { username } });
     }
-    findOneById(id) {
-        return `This action returns a #${id} user`;
+    async findOneBySteamId(steamId) {
+        return this.userRepository.findOne({ where: { steamId } });
     }
     update(id, updateUserDto) {
         return `This action updates a #${id} user`;

@@ -1,3 +1,4 @@
+import { ConsoleLogger } from '@nestjs/common';
 import { Entity, Column, PrimaryColumn } from 'typeorm';
 
 @Entity({ name: 'users' })
@@ -13,4 +14,10 @@ export class User {
 
   @Column()
   authStrategy: string;
+
+  @Column({
+    type: 'bigint',
+    nullable: true,
+  })
+  steamId: number;
 }

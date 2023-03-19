@@ -3,4 +3,5 @@ export declare class User {
     username: string;
     password: string;
     authStrategy: string;
+    steamId: number;
 }

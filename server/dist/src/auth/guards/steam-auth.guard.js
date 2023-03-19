@@ -6,17 +6,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LocalAuthGuard = void 0;
+exports.SteamAuthGuard = void 0;
 const common_1 = require("@nestjs/common");
 const passport_1 = require("@nestjs/passport");
-let LocalAuthGuard = class LocalAuthGuard extends (0, passport_1.AuthGuard)('local') {
-    handleRequest(...args) {
-        console.log(args);
-        return super.handleRequest(...args);
-    }
+let SteamAuthGuard = class SteamAuthGuard extends (0, passport_1.AuthGuard)('steam') {
 };
-LocalAuthGuard = __decorate([
+SteamAuthGuard = __decorate([
     (0, common_1.Injectable)()
-], LocalAuthGuard);
-exports.LocalAuthGuard = LocalAuthGuard;
-//# sourceMappingURL=local-auth.guard.js.map
+], SteamAuthGuard);
+exports.SteamAuthGuard = SteamAuthGuard;
+//# sourceMappingURL=steam-auth.guard.js.map

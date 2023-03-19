@@ -16,13 +16,13 @@ export class UsersService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
   ) {}
-  async create(createUserDto: CreateUserDto) {
+  async createLocal(createUserDto: CreateUserDto) {
     const strategy = 'local';
     const id = Math.floor(Math.random() * 90000000) + 10000000;
     const user = await this.findOneByUsername(createUserDto.username);
 
     if (user) {
-      throw new HttpException('User Already Exists', HttpStatus.BAD_REQUEST);
+      throw new HttpException('Username Taken', HttpStatus.BAD_REQUEST);
     } else {
       const user = {
         id: id,
@@ -34,12 +34,24 @@ export class UsersService {
     }
   }
 
+  async createSteam(data) {
+    const strategy = 'steam';
+    const id = Math.floor(Math.random() * 90000000) + 10000000;
+    const user = {
+      id: id,
+      authStrategy: strategy,
+      username: data.username,
+      steamId: data.id,
+    };
+    return this.userRepository.save(user);
+  }
+
   async findOneByUsername(username: string): Promise<User | undefined> {
     return this.userRepository.findOne({ where: { username } });
   }
 
-  findOneById(id: number) {
-    return `This action returns a #${id} user`;
+  async findOneBySteamId(steamId: number): Promise<User | undefined> {
+    return this.userRepository.findOne({ where: { steamId } });
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {

@@ -10,12 +10,18 @@
 import axios from 'axios'
 import { ref } from 'vue'
 
+const token = localStorage.getItem('access_token')
 
 const profile = ref('')
 
-axios.get('http://localhost:3001/profile', {})
+axios.get('http://localhost:3001/profile', {
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+})
   .then(response => {
     console.log(response)
+    profile.value = response.data
   })
   .then(error => {
     console.log(error)

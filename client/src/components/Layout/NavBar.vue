@@ -14,9 +14,7 @@
                 <router-link to="/dashboard">
                     <li>Dashboard</li>
                 </router-link>
-                <router-link to="/users">
-                    <li>Users</li>
-                </router-link>
+
             </ul>
 
         </nav>

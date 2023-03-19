@@ -19,10 +19,26 @@ export class AuthService {
     return null;
   }
 
-  async login(user: any) {
+  async loginLocal(user: any) {
     const payload = { username: user.username, sub: user.id };
     return {
       access_token: this.jwtService.sign(payload),
     };
+  }
+  async LoginSteam(user: any) {
+    const personaname = user._json.personaname;
+    const steamId = user._json.steamid;
+    const existing = await this.usersService.findOneBySteamId(steamId);
+    console.log(existing);
+
+    if (!existing) {
+      const user = { id: steamId, username: personaname };
+      this.usersService.createSteam(user);
+    } else {
+      const payload = { id: steamId, sub: personaname };
+      return {
+        access_token: this.jwtService.sign(payload),
+      };
+    }
   }
 }

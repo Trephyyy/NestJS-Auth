@@ -9,30 +9,27 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.JwtAuthGuard = void 0;
+exports.SteamStrategy = void 0;
 const common_1 = require("@nestjs/common");
-const core_1 = require("@nestjs/core");
 const passport_1 = require("@nestjs/passport");
-const consts_1 = require("../../utils/consts");
-let JwtAuthGuard = class JwtAuthGuard extends (0, passport_1.AuthGuard)('jwt') {
-    constructor(reflector) {
-        super();
-        this.reflector = reflector;
+const passport_steam_1 = require("passport-steam");
+const auth_service_1 = require("../auth.service");
+let SteamStrategy = class SteamStrategy extends (0, passport_1.PassportStrategy)(passport_steam_1.Strategy, 'steam') {
+    constructor(authService) {
+        super({
+            returnURL: 'http://localhost:3001/auth/steam/return',
+            realm: 'http://localhost:3001/',
+            apiKey: process.env.STEAM_KEY,
+        });
+        this.authService = authService;
     }
-    canActivate(context) {
-        const isPublic = this.reflector.getAllAndOverride(consts_1.IS_PUBLIC_KEY, [
-            context.getHandler(),
-            context.getClass(),
-        ]);
-        if (isPublic) {
-            return true;
-        }
-        return super.canActivate(context);
+    async validate(identifier, profile) {
+        return this.authService.LoginSteam(profile);
     }
 };
-JwtAuthGuard = __decorate([
+SteamStrategy = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [core_1.Reflector])
-], JwtAuthGuard);
-exports.JwtAuthGuard = JwtAuthGuard;
-//# sourceMappingURL=jwt-auth.guard.js.map
+    __metadata("design:paramtypes", [auth_service_1.AuthService])
+], SteamStrategy);
+exports.SteamStrategy = SteamStrategy;
+//# sourceMappingURL=steam.strategy.js.map

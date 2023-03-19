@@ -16,20 +16,43 @@
                 In</button>
         </form>
         <div class="div">{{ err }}</div>
-
+        <div class="my-10 text-2xl text-center"> OR </div>
+        <div class="flex flex-row space-x-4">
+            <div>
+                <Icon icon="mdi:github" width="40" />
+            </div>
+            <div @click="steamLogin()">
+                <Icon icon="mdi:steam" width="40" />
+            </div>
+            <div>
+                <Icon icon="mdi:facebook" width="40" />
+            </div>
+        </div>
     </div>
 </template>
 <script lang='ts' setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import axios from 'axios'
+import { Icon } from '@iconify/vue'
 
 const password = ref('')
 const username = ref('')
 
 const err = ref('')
 
+async function steamLogin() {
+    axios.get('http://localhost:3001/auth/steam')
+        .then(response => { window.location = response.data })
+}
+
+
+
+const getToken = () => {
+    axios.post('http://localhost:3001/auth/steam')
+}
+
 const submitForm = () => {
-    axios.post('http://localhost:3001/auth/login', { username: username.value, password: password.value })
+    axios.post('http://localhost:3001/auth/login/local', { username: username.value, password: password.value })
         .then(response => {
             err.value = "Logged In Successfully "
             console.log(response)
@@ -39,6 +62,7 @@ const submitForm = () => {
             err.value = error.response.data.message
         })
 }
+
 </script>
 <style lang='scss' scoped>
 input {

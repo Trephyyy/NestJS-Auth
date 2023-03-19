@@ -17,6 +17,7 @@ const local_strategy_1 = require("./strategies/local.strategy");
 const passport_1 = require("@nestjs/passport");
 const jwt_1 = require("@nestjs/jwt");
 const jwt_strategy_1 = require("./strategies/jwt.strategy");
+const steam_strategy_1 = require("./strategies/steam.strategy");
 let AuthModule = class AuthModule {
 };
 AuthModule = __decorate([
@@ -31,7 +32,7 @@ AuthModule = __decorate([
                 signOptions: { expiresIn: '7d' },
             }),
         ],
-        providers: [auth_service_1.AuthService, local_strategy_1.LocalStrategy, jwt_strategy_1.JwtStrategy],
+        providers: [auth_service_1.AuthService, local_strategy_1.LocalStrategy, jwt_strategy_1.JwtStrategy, steam_strategy_1.SteamStrategy],
     })
 ], AuthModule);
 exports.AuthModule = AuthModule;
