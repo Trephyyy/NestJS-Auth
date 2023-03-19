@@ -9,30 +9,27 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.JwtAuthGuard = void 0;
-const common_1 = require("@nestjs/common");
-const core_1 = require("@nestjs/core");
+exports.JwtStrategy = void 0;
+const passport_jwt_1 = require("passport-jwt");
 const passport_1 = require("@nestjs/passport");
-const consts_1 = require("../../utils/consts");
-let JwtAuthGuard = class JwtAuthGuard extends (0, passport_1.AuthGuard)('jwt') {
-    constructor(reflector) {
-        super();
-        this.reflector = reflector;
+const common_1 = require("@nestjs/common");
+const dotenv = require("dotenv");
+dotenv.config();
+let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(passport_jwt_1.Strategy) {
+    constructor() {
+        super({
+            jwtFromRequest: passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken(),
+            ignoreExpiration: false,
+            secretOrKey: process.env.JWT_SECRET,
+        });
     }
-    canActivate(context) {
-        const isPublic = this.reflector.getAllAndOverride(consts_1.IS_PUBLIC_KEY, [
-            context.getHandler(),
-            context.getClass(),
-        ]);
-        if (isPublic) {
-            return true;
-        }
-        return super.canActivate(context);
+    async validate(payload) {
+        return { userId: payload.sub, username: payload.username };
     }
 };
-JwtAuthGuard = __decorate([
+JwtStrategy = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [core_1.Reflector])
-], JwtAuthGuard);
-exports.JwtAuthGuard = JwtAuthGuard;
-//# sourceMappingURL=jwt-auth.guard.js.map
+    __metadata("design:paramtypes", [])
+], JwtStrategy);
+exports.JwtStrategy = JwtStrategy;
+//# sourceMappingURL=jwt.strategy.js.map

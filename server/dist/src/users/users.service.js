@@ -21,11 +21,22 @@ let UsersService = class UsersService {
     constructor(userRepository) {
         this.userRepository = userRepository;
     }
-    create(createUserDto) {
-        return 'This action adds a new user';
-    }
-    findAll() {
-        return `This action returns all users`;
+    async create(createUserDto) {
+        const strategy = 'local';
+        const id = Math.floor(Math.random() * 90000000) + 10000000;
+        const user = await this.findOneByUsername(createUserDto.username);
+        if (user) {
+            throw new common_1.HttpException('User Already Exists', common_1.HttpStatus.BAD_REQUEST);
+        }
+        else {
+            const user = {
+                id: id,
+                username: createUserDto.username,
+                password: createUserDto.password,
+                authStrategy: strategy,
+            };
+            return this.userRepository.save(user);
+        }
     }
     async findOneByUsername(username) {
         return this.userRepository.findOne({ where: { username } });

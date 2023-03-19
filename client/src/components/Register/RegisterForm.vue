@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col items-center justify-center w-full h-full">
         <form @submit.prevent="submitForm" class="my-20 space-y-8 form">
-            <h1 class="text-2xl text-center bold">Login</h1>
+            <h1 class="text-2xl text-center bold">Register</h1>
 
             <div class="">
                 <!-- <label for="username">Username:</label> -->
@@ -23,20 +23,28 @@
 import { ref } from 'vue'
 import axios from 'axios'
 
-const password = ref('')
+
 const username = ref('')
+const password = ref('')
 
 const err = ref('')
 
+const formData = {
+    username,
+    password
+}
 const submitForm = () => {
-    axios.post('http://localhost:3001/auth/login', { username: username.value, password: password.value })
+    console.log('Submitting...    ')
+    axios.post('http://localhost:3001/users', { username: username.value, password: password.value })
         .then(response => {
-            err.value = "Logged In Successfully "
+            err.value = 'User Created Successfully'
+
             console.log(response)
-            localStorage.setItem('access_token', response.data.access_token)
+            // handle success response
         })
         .catch(error => {
             err.value = error.response.data.message
+            console.log(error.response.data.message)
         })
 }
 </script>
@@ -48,13 +56,17 @@ input {
     border-radius: 4px;
     transition: border 500ms, border-radius 250ms;
 
+    &::placeholder {
+        transition: opacity 300ms;
+    }
+
     &:focus {
         border: 2px solid black;
         border-radius: 0px;
         outline: none;
 
         &::placeholder {
-            color: transparent;
+            opacity: 0;
         }
     }
 }

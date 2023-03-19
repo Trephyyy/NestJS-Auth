@@ -5,8 +5,12 @@ import { User } from './entities/user.entity';
 export declare class UsersService {
     private userRepository;
     constructor(userRepository: Repository<User>);
-    create(createUserDto: CreateUserDto): string;
-    findAll(): string;
+    create(createUserDto: CreateUserDto): Promise<{
+        id: number;
+        username: string;
+        password: string;
+        authStrategy: string;
+    } & User>;
     findOneByUsername(username: string): Promise<User | undefined>;
     findOneById(id: number): string;
     update(id: number, updateUserDto: UpdateUserDto): string;
